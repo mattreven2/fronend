@@ -3,23 +3,44 @@ import './Content.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKey, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate  } from 'react-router-dom';
+import { useStore } from './store'; 
+
 
 const Content = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
 
     // Estado para manejar si está cargando o no
   const [loading, setLoading] = useState(false);
+  const [rut, setRut] = useState('')
+  const [password, setPassword] = useState('');
+  const setToken = useStore((state: { setToken: any; }) => state.setToken);
   const navigate = useNavigate(); 
 
   // Función que se ejecuta al hacer clic en el botón "Confirmar"
-  const handleConfirmClick = () => {
+  const handleConfirmClick = async () => {
     setLoading(true); // Cambia el estado a "cargando"
 
     // Simula una solicitud de red o algún proceso
-    setTimeout(() => {
-      setLoading(false); // Finaliza la carga después de 2 segundos (simulación)
-       onLoginSuccess();;  // Notificar que el login fue exitoso
-       navigate('/home'); // Redirigir a la pantalla Home
-    }, 2000);
+    try {
+      // Enviar los datos al microservicio 1
+      const response = await fetch('https://api.tu-microservicio.com/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rut, password }),
+      });
+
+      const data = await response.json();
+
+      // Guardar accessToken y refreshToken en Zustand
+      setToken(data.accessToken, data.refreshToken);
+
+      // Mostrar un mensaje de éxito o redirigir al usuario
+      alert('Login exitoso');
+    } catch (error) {
+      console.error('Error en el login', error);
+      alert('Hubo un error, intenta de nuevo');
+    } finally {
+      setLoading(false); // Termina el loading
+    }
   };
 
   return (
