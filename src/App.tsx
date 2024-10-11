@@ -1,16 +1,25 @@
-import './App.css'
-import Header from './Header'
-import Content from './Content'
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Content from './Content';
+import Home from './Home';
+import './App.css';
 
-function App() {
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
 
   return (
-    <>
-      <Header />
-      <Content />
-      
-    </>
-  )
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<Content onLoginSuccess={handleLoginSuccess} />} />
+        {isLoggedIn && <Route path="/home" element={<Home />} />}
+      </Routes>
+    </Router>
+  );
+};
 
-export default App
+export default App;
+

@@ -1,0 +1,17 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+  }
+  
+  .home-button {
+    margin: 10px 0;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+    width: 200px;
+    text-align: center;
+  }
+  
